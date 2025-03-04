@@ -11,11 +11,11 @@ public class PostgresDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        if (!optionsBuilder.IsConfigured)
+        try
         {
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
             var configuration = new ConfigurationBuilder()
-                .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../EcommerceMinified.Api"))
+                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile($"appsettings.{environment}.json", optional: true)
                 .Build();
@@ -23,6 +23,10 @@ public class PostgresDbContext : DbContext
             var connectionString = configuration.GetConnectionString("DatabasePostgres");
 
             optionsBuilder.UseNpgsql(connectionString);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
         }
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)

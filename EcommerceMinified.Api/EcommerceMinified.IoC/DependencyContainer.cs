@@ -131,4 +131,28 @@ public class DependencyContainer
 
         #endregion
     }
+
+    //Iniciar o banco de dados com as migrations ao iniciar a aplicação
+    public static async Task InitializeDatabaseAsync(IServiceProvider serviceProvider)
+    {
+        try
+        {
+            using (var serviceScope = serviceProvider.CreateAsyncScope())
+            {
+                var context = serviceScope.ServiceProvider.GetService<PostgresDbContext>();
+                if (context != null)
+                {
+                    await context.Database.MigrateAsync();
+                }
+                else
+                {
+                    Console.WriteLine("PostgresDbContext is not registered in the service provider.");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error initializing the database: {ex.Message}");
+        }
+    }
 }
