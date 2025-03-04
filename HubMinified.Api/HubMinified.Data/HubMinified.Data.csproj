@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HubMinified.Data.Mongo\HubMinified.Data.Mongo.csproj" />
+    <ProjectReference Include="..\HubMinified.Domain\HubMinified.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
