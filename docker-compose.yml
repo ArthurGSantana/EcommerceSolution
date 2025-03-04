@@ -1,0 +1,63 @@
+version: "3.7"
+
+services:
+  ecommerce:
+    build: ./EcommerceMinified.Api
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      POSTGRES_HOST: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    depends_on:
+      - rabbitmq
+      - postgres
+    ports:
+      - "8080:8080"
+    networks:
+      - ecom-network
+
+  hub:
+    build: ./HubMinified.Api
+    environment:
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+    depends_on:
+      - rabbitmq
+    networks:
+      - ecom-network
+
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    networks:
+      - ecom-network
+
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - ecom-network
+
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - ecom-network
+
+networks:
+  ecom-network:
+
+volumes:
+  postgres_data:
