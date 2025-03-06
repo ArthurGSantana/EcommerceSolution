@@ -31,7 +31,7 @@ public class DependencyContainer
     public static void RegisterServices(IServiceCollection services, ConfigurationManager configuration)
     {
         #region Postgres
-        var postgresConnectionString = configuration.GetSection("DatabasePostgres").Value ?? "";
+        var postgresConnectionString = configuration.GetSection("ConnectionStrings:DatabasePostgres").Value ?? "";
 
         services.AddDbContext<PostgresDbContext>(options =>
             {
@@ -75,7 +75,7 @@ public class DependencyContainer
         #endregion
 
         #region Redis
-        var redisConnectionString = configuration.GetSection("Redis").Value ?? "";
+        var redisConnectionString = configuration.GetSection("ConnectionStrings:Redis").Value ?? "";
 
         services.AddStackExchangeRedisCache(options =>
         {
@@ -110,14 +110,14 @@ public class DependencyContainer
         #endregion
 
         #region MassTransit
-        string busConnectionstring = configuration.GetSection("Bus:ConnectionString").Value ?? "";
+        string busConnectionString = configuration.GetSection("Bus:ConnectionString").Value ?? "";
         string queueProductInfo = configuration.GetSection("Bus:ProductInfoQueue").Value ?? "";
 
         services.AddMassTransit(x =>
         {
             x.UsingRabbitMq((context, cfg) =>
             {
-                cfg.Host(new Uri(busConnectionstring), h =>
+                cfg.Host(new Uri(busConnectionString), h =>
                 {
                     h.Username("guest");
                     h.Password("guest");
@@ -127,8 +127,22 @@ public class DependencyContainer
             });
         });
 
-        EndpointConvention.Map<ProductInfoCommand>(new Uri($"{busConnectionstring}/{queueProductInfo}"));
+        EndpointConvention.Map<ProductInfoCommand>(new Uri($"{busConnectionString}/{queueProductInfo}"));
 
+        #endregion
+
+        #region HealthChecks
+        var healthChecksBuilder = services.AddHealthChecks();
+
+        if (!string.IsNullOrEmpty(postgresConnectionString))
+        {
+            healthChecksBuilder.AddNpgSql(postgresConnectionString);
+        }
+
+        if (!string.IsNullOrEmpty(redisConnectionString))
+        {
+            healthChecksBuilder.AddRedis(redisConnectionString);
+        }
         #endregion
     }
 

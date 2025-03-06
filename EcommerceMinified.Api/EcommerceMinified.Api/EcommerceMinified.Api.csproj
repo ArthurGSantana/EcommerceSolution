@@ -6,9 +6,10 @@
     <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+    <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="9.0.0"/>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EcommerceMinified.IoC\EcommerceMinified.IoC.csproj" />
+    <ProjectReference Include="..\EcommerceMinified.IoC\EcommerceMinified.IoC.csproj"/>
   </ItemGroup>
 </Project>

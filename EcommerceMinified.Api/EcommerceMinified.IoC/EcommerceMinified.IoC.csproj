@@ -11,6 +11,8 @@
     <PackageReference Include="Microsoft.Extensions.Resilience" Version="9.2.0" />
     <PackageReference Include="MassTransit" Version="8.3.6" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.6" />
+    <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="9.0.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.Redis" Version="9.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EcommerceMinified.Application\EcommerceMinified.Application.csproj" />
