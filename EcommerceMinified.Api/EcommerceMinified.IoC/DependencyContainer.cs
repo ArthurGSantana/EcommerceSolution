@@ -2,6 +2,7 @@ using AutoMapper;
 using EcommerceMinified.Application.Caching;
 using EcommerceMinified.Application.Publishers;
 using EcommerceMinified.Application.Services;
+using EcommerceMinified.Data.GraphQL.Query;
 using EcommerceMinified.Data.Postgres.Context;
 using EcommerceMinified.Data.Repository;
 using EcommerceMinified.Data.Rest.Repository;
@@ -66,6 +67,12 @@ public class DependencyContainer
 
         #region RestRepository
         services.AddScoped<IHubMinifiedRestRespository, HubMinifiedRestRespository>();
+        #endregion
+
+        #region GraphQL
+        services.AddGraphQLServer()
+            .AddQueryType<ProductQuery>()
+            .ModifyRequestOptions(opt => opt.IncludeExceptionDetails = true);
         #endregion
 
         #region FluentValidation

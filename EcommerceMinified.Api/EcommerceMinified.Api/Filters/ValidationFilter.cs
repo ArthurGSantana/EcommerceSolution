@@ -3,6 +3,7 @@ using System.Text.Json;
 using EcommerceMinified.Domain.ViewModel.Response;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Error = EcommerceMinified.Domain.ViewModel.Response.Error;
 
 namespace EcommerceMinified.Api.Filters;
 

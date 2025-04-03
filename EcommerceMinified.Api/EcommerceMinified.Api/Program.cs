@@ -4,6 +4,7 @@ using EcommerceMinified.Api.Filters;
 using EcommerceMinified.Domain.Config;
 using EcommerceMinified.IoC;
 using HealthChecks.UI.Client;
+using HotChocolate.AspNetCore;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,7 +36,16 @@ if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+app.MapGraphQL("/graphql").WithOptions(new GraphQLServerOptions
+{
+    Tool = { Enable = true }, // Habilita o playground GraphQL
+    EnableSchemaRequests = true // Permite acessar o esquema no endpoint
+}); ;
+
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 app.MapHealthChecks("/health", new HealthCheckOptions()
 {

@@ -16,6 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EcommerceMinified.Application\EcommerceMinified.Application.csproj" />
+    <ProjectReference Include="..\EcommerceMinified.Data.GraphQL\EcommerceMinified.Data.GraphQL.csproj" />
     <ProjectReference Include="..\EcommerceMinified.Data.Postgres\EcommerceMinified.Data.Postgres.csproj" />
     <ProjectReference Include="..\EcommerceMinified.Data.Rest\EcommerceMinified.Data.Rest.csproj" />
     <ProjectReference Include="..\EcommerceMinified.Data\EcommerceMinified.Data.csproj" />
