@@ -2,6 +2,7 @@ using AutoMapper;
 using EcommerceMinified.Application.Caching;
 using EcommerceMinified.Application.Publishers;
 using EcommerceMinified.Application.Services;
+using EcommerceMinified.Data.GraphQL.Mutation;
 using EcommerceMinified.Data.GraphQL.Query;
 using EcommerceMinified.Data.Postgres.Context;
 using EcommerceMinified.Data.Repository;
@@ -71,8 +72,12 @@ public class DependencyContainer
 
         #region GraphQL
         services.AddGraphQLServer()
+            .ModifyRequestOptions(opt => opt.IncludeExceptionDetails = true)
+            //Query
             .AddQueryType<ProductQuery>()
-            .ModifyRequestOptions(opt => opt.IncludeExceptionDetails = true);
+
+            //Mutation
+            .AddMutationType<ProductMutation>();
         #endregion
 
         #region FluentValidation

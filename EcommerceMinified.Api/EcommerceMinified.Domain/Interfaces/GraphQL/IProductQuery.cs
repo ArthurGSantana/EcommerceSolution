@@ -10,12 +10,12 @@ public interface IProductQuery
     /// Get all products
     /// </summary>
     /// <returns>List of products</returns>
-    Task<List<ProductDto>> GetAllProducts(IProductService productService);
+    Task<List<ProductDto>> GetAllProducts();
 
     /// <summary>
     /// Get product by id
     /// </summary>
     /// <param name="id">Product id</param>
     /// <returns>Product</returns>
-    Task<ProductDto> GetProductById(IProductService productService, Guid id);
+    Task<ProductDto> GetProductById(Guid id);
 }

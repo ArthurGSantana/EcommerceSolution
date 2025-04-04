@@ -4,19 +4,19 @@ using EcommerceMinified.Domain.ViewModel.DTOs;
 
 namespace EcommerceMinified.Data.GraphQL.Query;
 
-public class ProductQuery : IProductQuery
+public class ProductQuery(IProductService _productService) : IProductQuery
 {
     [GraphQLName("GetAllProducts")]
     [GraphQLDescription("Get all products")]
-    public Task<List<ProductDto>> GetAllProducts([Service] IProductService productService)
+    public Task<List<ProductDto>> GetAllProducts()
     {
-        return productService.GetProductsAsync();
+        return _productService.GetProductsAsync();
     }
 
     [GraphQLName("GetProductById")]
     [GraphQLDescription("Get product by id")]
-    public Task<ProductDto> GetProductById([Service] IProductService productService, Guid id)
+    public Task<ProductDto> GetProductById(Guid id)
     {
-        return productService.GetProductByIdAsync(id);
+        return _productService.GetProductByIdAsync(id);
     }
 }
