@@ -74,8 +74,15 @@ public class ProductService(IUnitOfWork _unitOfWork, IMapper _mapper, IRedisServ
 
     public async Task<List<ProductDto>> GetProductsAsync()
     {
-        var products = await _unitOfWork.ProductRepository.GetAllAsync();
-        return _mapper.Map<List<ProductDto>>(products);
+        try
+        {
+            var products = await _unitOfWork.ProductRepository.GetAllAsync();
+            return _mapper.Map<List<ProductDto>>(products);
+        }
+        catch (Exception ex)
+        {
+            throw new EcommerceMinifiedDomainException(ex.Message, ErrorCodeEnum.InternalServerError);
+        }
     }
 
     public async Task<ProductDto> UpdateProductAsync(ProductDto Product)

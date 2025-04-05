@@ -10,21 +10,25 @@ public class ProductMutation(IProductService _productService) : IProductMutation
 {
     [GraphQLName("CreateProduct")]
     [GraphQLDescription("Create a new product")]
-    public Task<ProductDto> CreateProduct(ProductDto product)
+    public async Task<ProductDto> CreateProduct(ProductDto product)
     {
         if (product.Category is null)
         {
             product.Category = ProductCategoryEnum.Other;
         }
+
+        var newProduct = await _productService.CreateProductAsync(product);
         
-        return _productService.CreateProductAsync(product);
+        return newProduct;
     }
 
     [GraphQLName("UpdateProduct")]
     [GraphQLDescription("Update an existing product")]
-    public Task<ProductDto> UpdateProduct(ProductDto product)
+    public async Task<ProductDto> UpdateProduct(ProductDto product)
     {
-        return _productService.UpdateProductAsync(product);
+        var updatedProduct = await _productService.UpdateProductAsync(product);
+        
+        return updatedProduct;
     }
 
     [GraphQLName("DeleteProduct")]
