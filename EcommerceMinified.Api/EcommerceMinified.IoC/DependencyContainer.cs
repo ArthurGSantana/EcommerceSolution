@@ -73,8 +73,14 @@ public class DependencyContainer
         #region GraphQL
         services.AddGraphQLServer()
             .ModifyRequestOptions(opt => opt.IncludeExceptionDetails = true)
+            .AddFiltering()
+            .AddSorting()
+            .AddProjections()
+
             //Query
-            .AddQueryType<ProductQuery>()
+            .AddQueryType(d => d.Name("Query"))
+            .AddTypeExtension<ProductQuery>()
+            .AddTypeExtension<CustomerQuery>()
 
             //Mutation
             .AddMutationType<ProductMutation>();

@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EcommerceMinified.Data.Postgres\EcommerceMinified.Data.Postgres.csproj" />
     <ProjectReference Include="..\EcommerceMinified.Domain\EcommerceMinified.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
