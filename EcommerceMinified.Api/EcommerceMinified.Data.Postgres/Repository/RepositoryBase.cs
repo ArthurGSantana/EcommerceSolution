@@ -17,7 +17,7 @@ namespace Desafio4.Data.Postgres.Repository
             _context = context;
         }
 
-        public async Task<K> GetAsync(bool tracking, Func<IQueryable<K>, IIncludableQueryable<K, object>>? include = null, Expression<Func<K, bool>>? predicate = null)
+        public async Task<K?> GetAsync(bool tracking, Func<IQueryable<K>, IIncludableQueryable<K, object>>? include = null, Expression<Func<K, bool>>? predicate = null)
         {
             IQueryable<K> query = _context.Set<K>();
             if (!tracking)

@@ -92,8 +92,17 @@ public class RedisService : IRedisService
         }
     }
 
-    public void Remove(string key)
+    public async Task RemoveAsync<T>(Guid id)
     {
-        _cache.Remove(key);
+        var key = $"{nameof(T)}_{id}";
+
+        try
+        {
+            await _cache.RemoveAsync(key);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Error removing value from Redis, key: {@key}", key);
+        }
     }
 }

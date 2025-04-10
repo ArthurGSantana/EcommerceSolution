@@ -19,7 +19,7 @@ public class ProductService(IUnitOfWork _unitOfWork, IMapper _mapper, IRedisServ
         var random = new Random();
         var exists = await _unitOfWork.ProductRepository.GetAsync(false, null, x => x.Name == product.Name);
 
-        if (exists != null)
+        if (exists is not null)
         {
             throw new EcommerceMinifiedDomainException("Product already exists", ErrorCodeEnum.AlreadyExists);
         }
@@ -44,7 +44,7 @@ public class ProductService(IUnitOfWork _unitOfWork, IMapper _mapper, IRedisServ
     {
         var product = await _unitOfWork.ProductRepository.GetAsync(false, null, x => x.Id == id);
 
-        if (product == null)
+        if (product is null)
         {
             throw new EcommerceMinifiedDomainException("Product not found", ErrorCodeEnum.NotFound);
         }
@@ -74,34 +74,29 @@ public class ProductService(IUnitOfWork _unitOfWork, IMapper _mapper, IRedisServ
 
     public async Task<List<ProductDto>> GetProductsAsync()
     {
-        try
-        {
-            var products = await _unitOfWork.ProductRepository.GetAllAsync();
-            return _mapper.Map<List<ProductDto>>(products);
-        }
-        catch (Exception ex)
-        {
-            throw new EcommerceMinifiedDomainException(ex.Message, ErrorCodeEnum.InternalServerError);
-        }
+        var products = await _unitOfWork.ProductRepository.GetAllAsync();
+        return _mapper.Map<List<ProductDto>>(products);
     }
 
-    public async Task<ProductDto> UpdateProductAsync(ProductDto Product)
+    public async Task<ProductDto> UpdateProductAsync(ProductDto product)
     {
-        var currentProduct = await _unitOfWork.ProductRepository.GetAsync(true, null, x => x.Id == Product.Id);
+        var currentProduct = await _unitOfWork.ProductRepository.GetAsync(true, null, x => x.Id == product.Id);
 
-        if (currentProduct == null)
+        if (currentProduct is null)
         {
             throw new EcommerceMinifiedDomainException("Product not found", ErrorCodeEnum.NotFound);
         }
 
-        currentProduct.Name = Product.Name;
-        currentProduct.Description = Product.Description;
-        currentProduct.Price = Product.Price;
-        currentProduct.Stock = Product.Stock;
-        currentProduct.Image = Product.Image;
+        currentProduct.Name = product.Name;
+        currentProduct.Description = product.Description;
+        currentProduct.Price = product.Price;
+        currentProduct.Stock = product.Stock;
+        currentProduct.Image = product.Image;
 
         _unitOfWork.ProductRepository.Update(currentProduct);
         await _unitOfWork.CommitPostgresAsync();
+
+        await _redisService.RemoveAsync<Product>(currentProduct.Id);
 
         return _mapper.Map<ProductDto>(currentProduct);
     }
