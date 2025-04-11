@@ -21,6 +21,7 @@
     <PackageReference Include="FluentAssertions" Version="8.2.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EcommerceMinified.Api\EcommerceMinified.Api.csproj" />
     <ProjectReference Include="..\EcommerceMinified.Application\EcommerceMinified.Application.csproj" />
     <ProjectReference Include="..\EcommerceMinified.Domain\EcommerceMinified.Domain.csproj" />
   </ItemGroup>
