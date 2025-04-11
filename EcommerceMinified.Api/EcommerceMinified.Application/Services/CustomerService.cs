@@ -42,21 +42,22 @@ public class CustomerService(IUnitOfWork _unitOfWork, IMapper _mapper) : ICustom
         await _unitOfWork.CommitPostgresAsync();
     }
 
-    public async Task<Customer> GetCustomerByIdAsync(Guid id)
+    public async Task<CustomerDto> GetCustomerByIdAsync(Guid id)
     {
-        var customer = await _unitOfWork.CustomerRepository.GetAsync(false, x => x.Include(c => c.Address), x => x.Id == id);
+        var customer = await _unitOfWork.CustomerRepository.GetAsync(false, x => x.Include(c => c.Address!), x => x.Id == id);
 
         if (customer == null)
         {
             throw new EcommerceMinifiedDomainException("Customer not found", ErrorCodeEnum.NotFound);
         }
 
-        return customer;
+        return _mapper.Map<CustomerDto>(customer);
     }
 
-    public async Task<List<Customer>> GetCustomersAsync()
+    public async Task<List<CustomerDto>> GetCustomersAsync()
     {
-        return await _unitOfWork.CustomerRepository.GetFilteredAsync(false, x => x.Include(c => c.Address));
+        var customers = await _unitOfWork.CustomerRepository.GetFilteredAsync(false, x => x.Include(c => c.Address!));
+        return _mapper.Map<List<CustomerDto>>(customers);
     }
 
     public async Task<CustomerDto> UpdateCustomerAsync(CustomerDto customer)

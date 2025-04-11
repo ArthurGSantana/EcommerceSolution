@@ -6,9 +6,9 @@ namespace EcommerceMinified.Domain.Interfaces.Services;
 
 public interface ICustomerService
 {
-    Task<Customer> GetCustomerByIdAsync(Guid id);
+    Task<CustomerDto> GetCustomerByIdAsync(Guid id);
     Task<CustomerDto> CreateCustomerAsync(CustomerDto customer);
     Task<CustomerDto> UpdateCustomerAsync(CustomerDto customer);
     Task DeleteCustomerAsync(Guid id);
-    Task<List<Customer>> GetCustomersAsync();
+    Task<List<CustomerDto>> GetCustomersAsync();
 }
