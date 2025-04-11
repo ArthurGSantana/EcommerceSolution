@@ -22,11 +22,6 @@ public class ProductController(IProductService _productService) : ControllerBase
     {
         var product = await _productService.GetProductByIdAsync(id);
 
-        if (product == null)
-        {
-            return NotFound();
-        }
-
         return Ok(product);
     }
 

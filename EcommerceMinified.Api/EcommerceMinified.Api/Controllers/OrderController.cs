@@ -22,11 +22,6 @@ public class OrderController(IOrderService _orderService) : ControllerBase
     {
         var order = await _orderService.GetOrderByIdAsync(id);
 
-        if (order == null)
-        {
-            return NotFound();
-        }
-
         return Ok(order);
     }
 

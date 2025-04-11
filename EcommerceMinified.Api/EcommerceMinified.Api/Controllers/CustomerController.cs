@@ -21,11 +21,6 @@ public class CustomerController(ICustomerService _customerService) : ControllerB
     {
         var customer = await _customerService.GetCustomerByIdAsync(id);
 
-        if (customer == null)
-        {
-            return NotFound();
-        }
-
         return Ok(customer);
     }
 
