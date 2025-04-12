@@ -41,19 +41,19 @@ public class RedisService : IRedisService
     {
         try
         {
-            var key = $"{nameof(T)}_{id}";
+            var key = $"{typeof(T).Name}_{id}";
 
             var result = await CircuitBreakerPolicy.ExecuteAsync(async (_) =>
             {
                 var response = await _cache.GetStringAsync(key);
 
-                if (response == null)
+                if (response is null)
                 {
                     return default;
                 }
-                var serializedResponse = JsonSerializer.Deserialize<T>(response);
+                var value = JsonSerializer.Deserialize<T>(response);
 
-                return serializedResponse;
+                return value;
 
             }, new CancellationTokenSource(TimeSpan.FromMilliseconds(_redisTimeoutInMilliseconds)).Token);
 
@@ -69,7 +69,7 @@ public class RedisService : IRedisService
 
     public async Task SetAsync<T>(Guid id, T value, TimeSpan? expiration = null)
     {
-        var key = $"{nameof(T)}_{id}";
+        var key = $"{typeof(T).Name}_{id}";
 
         try
         {
@@ -94,7 +94,7 @@ public class RedisService : IRedisService
 
     public async Task RemoveAsync<T>(Guid id)
     {
-        var key = $"{nameof(T)}_{id}";
+        var key = $"{typeof(T).Name}_{id}";
 
         try
         {
