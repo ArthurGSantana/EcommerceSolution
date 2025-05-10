@@ -5,10 +5,11 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HubMinified.Data\HubMinified.Data.csproj"/>
-    <ProjectReference Include="..\HubMinified.Domain\HubMinified.Domain.csproj"/>
+    <ProjectReference Include="..\HubMinified.Data.Grpc\HubMinified.Data.Grpc.csproj" />
+    <ProjectReference Include="..\HubMinified.Data\HubMinified.Data.csproj" />
+    <ProjectReference Include="..\HubMinified.Domain\HubMinified.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.6"/>
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.6" />
   </ItemGroup>
 </Project>
