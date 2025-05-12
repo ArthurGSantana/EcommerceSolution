@@ -4,10 +4,12 @@ using EcommerceMinified.Application.Publishers;
 using EcommerceMinified.Application.Services;
 using EcommerceMinified.Data.GraphQL.Mutation;
 using EcommerceMinified.Data.GraphQL.Query;
+using EcommerceMinified.Data.Grpc.Clients;
 using EcommerceMinified.Data.Postgres.Context;
 using EcommerceMinified.Data.Repository;
 using EcommerceMinified.Data.Rest.Repository;
 using EcommerceMinified.Domain.Interfaces.Caching;
+using EcommerceMinified.Domain.Interfaces.GrpcClients;
 using EcommerceMinified.Domain.Interfaces.Publishers;
 using EcommerceMinified.Domain.Interfaces.Repository;
 using EcommerceMinified.Domain.Interfaces.RestRepository;
@@ -17,11 +19,13 @@ using EcommerceMinified.Domain.Validators;
 using EcommerceMinified.MsgContracts.Command;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using FreightProtoService;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.CircuitBreaker;
 using Polly.Retry;
@@ -160,6 +164,19 @@ public class DependencyContainer
         if (!string.IsNullOrEmpty(redisConnectionString))
         {
             healthChecksBuilder.AddRedis(redisConnectionString);
+        }
+        #endregion
+
+        #region gRPC Services
+        var grpcFreightUrl = configuration.GetSection("GrpcServices:FreightService").Value ?? "";
+
+        if (!string.IsNullOrEmpty(grpcFreightUrl))
+        {
+            services.AddSingleton<IFreightClientService<GetFreightDetailsRequest, GetFreightDetailsResponse>>(provider =>
+            {
+                var logger = provider.GetRequiredService<ILogger<FreightClientService>>();
+                return new FreightClientService(logger, grpcFreightUrl);
+            });
         }
         #endregion
     }
