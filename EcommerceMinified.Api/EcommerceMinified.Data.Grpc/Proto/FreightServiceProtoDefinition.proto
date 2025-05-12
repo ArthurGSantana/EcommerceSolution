@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option csharp_namespace = "FreightProtoService";
+package freight_proto_service;
+
+service FreightService {
+    rpc GetFreightAsync (GetFreightDetailsRequest) returns (GetFreightDetailsResponse);
+}
+
+message GetFreightDetailsRequest {
+    string productId = 1;
+}
+
+message GetFreightDetailsResponse {
+    string freightId = 1;
+    int64 freightValue = 2;
+    string deliveryTime = 3;
+    string deliveryType = 4;
+}
