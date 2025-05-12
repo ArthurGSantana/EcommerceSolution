@@ -28,6 +28,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.CircuitBreaker;
+using Polly.Registry;
 using Polly.Retry;
 
 namespace EcommerceMinified.IoC;
@@ -175,7 +176,8 @@ public class DependencyContainer
             services.AddSingleton<IFreightClientService<GetFreightDetailsRequest, GetFreightDetailsResponse>>(provider =>
             {
                 var logger = provider.GetRequiredService<ILogger<FreightClientService>>();
-                return new FreightClientService(logger, grpcFreightUrl);
+                var pipelineProvider = provider.GetRequiredService<ResiliencePipelineProvider<string>>();
+                return new FreightClientService(logger, grpcFreightUrl, pipelineProvider);
             });
         }
         #endregion
