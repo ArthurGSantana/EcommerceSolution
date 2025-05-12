@@ -3,15 +3,17 @@ using AutoMapper;
 using EcommerceMinified.Domain.Entity;
 using EcommerceMinified.Domain.Enum;
 using EcommerceMinified.Domain.Exceptions;
+using EcommerceMinified.Domain.Interfaces.GrpcClients;
 using EcommerceMinified.Domain.Interfaces.Repository;
 using EcommerceMinified.Domain.Interfaces.RestRepository;
 using EcommerceMinified.Domain.Interfaces.Services;
 using EcommerceMinified.Domain.ViewModel.DTOs;
+using FreightProtoService;
 using Microsoft.EntityFrameworkCore;
 
 namespace EcommerceMinified.Application.Services;
 
-public class OrderService(IUnitOfWork _unitOfWork, IMapper _mapper, IHubMinifiedRestRespository _hubMinifiedRestRespository) : IOrderService
+public class OrderService(IUnitOfWork _unitOfWork, IMapper _mapper, IHubMinifiedRestRespository _hubMinifiedRestRespository, IFreightClientService<GetFreightDetailsRequest, GetFreightDetailsResponse> _freightClientService) : IOrderService
 {
     public async Task<OrderDto> CreateOrderAsync(OrderDto order)
     {
@@ -105,8 +107,24 @@ public class OrderService(IUnitOfWork _unitOfWork, IMapper _mapper, IHubMinified
             throw new EcommerceMinifiedDomainException("Product not found", ErrorCodeEnum.NotFound);
         }
 
-        var response = await _hubMinifiedRestRespository.GetFreightInfoAsync(freightRequest);
+        // Implementação com RestSharp
+        // var response = await _hubMinifiedRestRespository.GetFreightInfoAsync(freightRequest);
 
+        // Implementação com Grpc
+        var request = new GetFreightDetailsRequest
+        {
+            ProductId = freightRequest.ProductId.ToString()
+        };
+
+        var grpcClient = await _freightClientService.GetFreightInfoAsync(request);
+
+        var response = new FreightResponseDto
+        {
+            DeliveryType = grpcClient.DeliveryType,
+            FreightValue = grpcClient.FreightValue,
+            DeliveryTime = grpcClient.DeliveryTime
+        };
+       
         return response;
     }
 }

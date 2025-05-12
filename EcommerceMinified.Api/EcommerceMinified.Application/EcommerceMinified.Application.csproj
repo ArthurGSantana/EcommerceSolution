@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EcommerceMinified.Data.Grpc\EcommerceMinified.Data.Grpc.csproj" />
     <ProjectReference Include="..\EcommerceMinified.Domain\EcommerceMinified.Domain.csproj" />
     <ProjectReference Include="..\EcommerceMinified.MsgContracts\EcommerceMinified.MsgContracts.csproj" />
   </ItemGroup>

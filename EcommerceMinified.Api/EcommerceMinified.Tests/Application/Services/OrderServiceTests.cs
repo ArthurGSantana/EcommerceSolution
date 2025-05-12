@@ -5,10 +5,12 @@ using EcommerceMinified.Application.Services;
 using EcommerceMinified.Domain.Entity;
 using EcommerceMinified.Domain.Enum;
 using EcommerceMinified.Domain.Exceptions;
+using EcommerceMinified.Domain.Interfaces.GrpcClients;
 using EcommerceMinified.Domain.Interfaces.Repository;
 using EcommerceMinified.Domain.Interfaces.RestRepository;
 using EcommerceMinified.Domain.Interfaces.Services;
 using EcommerceMinified.Domain.ViewModel.DTOs;
+using FreightProtoService;
 using Microsoft.EntityFrameworkCore.Query;
 
 namespace EcommerceMinified.Tests.Application.Services;
@@ -19,6 +21,7 @@ public class OrderServiceTests
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly Mock<IMapper> _mapperMock;
     private readonly Mock<IHubMinifiedRestRespository> _hubMinifiedRestRespositoryMock;
+    private readonly Mock<IFreightClientService<GetFreightDetailsRequest, GetFreightDetailsResponse>> _freightClientServiceMock;
 
     private readonly OrderDto _orderDto;
     private readonly Order _order;
@@ -34,8 +37,9 @@ public class OrderServiceTests
         _unitOfWorkMock = new Mock<IUnitOfWork>();
         _mapperMock = new Mock<IMapper>();
         _hubMinifiedRestRespositoryMock = new Mock<IHubMinifiedRestRespository>();
+        _freightClientServiceMock = new Mock<IFreightClientService<GetFreightDetailsRequest, GetFreightDetailsResponse>>();
 
-        _sut = new OrderService(_unitOfWorkMock.Object, _mapperMock.Object, _hubMinifiedRestRespositoryMock.Object);
+        _sut = new OrderService(_unitOfWorkMock.Object, _mapperMock.Object, _hubMinifiedRestRespositoryMock.Object, _freightClientServiceMock.Object);
 
         // Setup product
         _product = new Product
