@@ -1,12 +1,13 @@
-using System;
+using DnsClient.Internal;
 using FreightProtoService;
 using Grpc.Core;
 using HubMinified.Domain.Enum;
 using HubMinified.Domain.Interfaces.Repository;
+using Microsoft.Extensions.Logging;
 
 namespace HubMinified.Application.Grpc;
 
-public class FreightGrpcService(IUnitOfWork _unitOfWork) : FreightProtoService.FreightService.FreightServiceBase
+public class FreightGrpcService(IUnitOfWork _unitOfWork, ILogger<FreightGrpcService> _logger) : FreightProtoService.FreightService.FreightServiceBase
 {
 
     public override async Task<GetFreightDetailsResponse> GetFreightAsync(GetFreightDetailsRequest request, ServerCallContext context)
@@ -50,7 +51,7 @@ public class FreightGrpcService(IUnitOfWork _unitOfWork) : FreightProtoService.F
         catch (Exception ex)
         {
             // Log do erro
-            Console.WriteLine($"Erro ao calcular frete: {ex}");
+            _logger.LogError(ex, "Erro ao calcular o frete para o produto: {ProductId}", request.ProductId);
             throw new RpcException(new Status(StatusCode.Internal, "Erro ao calcular o frete"));
         }
     }
