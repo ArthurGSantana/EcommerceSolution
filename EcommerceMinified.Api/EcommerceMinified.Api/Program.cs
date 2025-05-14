@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using Desafio4.Api.Filters;
 using EcommerceMinified.Api.Filters;
 using EcommerceMinified.Domain.Config;
 using EcommerceMinified.IoC;
@@ -51,6 +50,8 @@ app.MapHealthChecks("/health", new HealthCheckOptions()
 {
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
+
+app.UseExceptionHandler();
 
 app.UseAuthorization();
 
